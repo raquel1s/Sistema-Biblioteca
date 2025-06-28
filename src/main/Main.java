@@ -1,0 +1,180 @@
+package main;
+
+import dominio.*;
+import interfaces.*;
+import repositorio.LivroRepositoryEmMemoria;
+import repositorio.UsuarioRepositorioEmMemoria;
+import servicos.AutenticacaoService;
+import servicos.CadastroLivroService;
+import servicos.EmprestimoService;
+import servicos.LeitorService;
+
+import java.util.Scanner;
+
+public class Main {
+
+    private static int opcao = 0;
+    private static final Scanner sc = new Scanner(System.in);
+    private static final IUsuarioRepository usuarioRepo = new UsuarioRepositorioEmMemoria();
+    private static ILoginService autenticar = new AutenticacaoService(usuarioRepo);
+    private static ILivroRepository livroRepo = new LivroRepositoryEmMemoria();
+    private static IAcoesAdministrador acoesAdm = new CadastroLivroService(livroRepo, usuarioRepo);
+    private static IEmprestimoService emprestimo = new EmprestimoService(livroRepo);
+    private static IAcoesLeitor acoesLeitor = new LeitorService(livroRepo, emprestimo);
+
+    public static void main(String[] args) {
+        opcao = 0;
+
+        do{
+            System.out.println("1. Cadastrar");
+            System.out.println("2. Entrar");
+            System.out.println("3. Sair");
+            opcao = sc.nextInt();
+
+            switch (opcao){
+                case 1 -> cadastrar();
+                case 2 -> {
+                    sc.nextLine();
+                    login();
+                }
+                case 3 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção Inválida.");
+            }
+        }while(opcao != 3);
+    }
+
+    public static void login(){
+        for(int i =0; i<3; i++){
+            System.out.println("Digite seu email: ");
+            String email = sc.nextLine();
+
+            System.out.println("Digite sua senha: ");
+            String senha = sc.nextLine();
+
+            Usuario usuario = autenticar.login(email, senha);
+
+            if(usuario instanceof Leitor){
+                menuLeitor((Leitor) usuario);
+                return;
+            }else if(usuario instanceof Administrador){
+                menuAdministrador((Administrador) usuario);
+                return;
+            }else{
+                System.out.println("Email ou senha incorretos.");
+            }
+        }
+        System.out.println("Tentativas excedidas.");
+    }
+
+    public static void cadastrar(){
+        opcao = 0;
+        Usuario usuario;
+
+        System.out.println("1. Leitor");
+        System.out.println("2. Administrador");
+        opcao = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Digite seu nome: ");
+        String nome = sc.next();
+
+        System.out.println("Digite seu email: ");
+        String email = sc.next();
+
+        System.out.println("Digite sua senha: ");
+        String senha = sc.next();
+
+        switch (opcao){
+            case 1 -> {
+                System.out.println("Digite sua matricula: ");
+                String matricula = sc.next();
+
+                usuario = new Leitor(nome,email,senha,matricula);
+                usuarioRepo.salvar(usuario);
+                System.out.println("Leitor cadastrado com sucesso.");
+            }
+            case 2 -> {
+                System.out.println("Digite seu cargo: ");
+                String cargo = sc.next();
+
+                usuario = new Administrador(nome,email,senha,cargo);
+                usuarioRepo.salvar(usuario);
+                System.out.println("Administrador cadastrado com sucesso.");
+            }
+            default -> System.out.println("Opção Inválida.");
+        }
+    }
+
+    public static void menuLeitor(Leitor leitor){
+        opcao = 0;
+
+        do{
+            System.out.println("1. Ver livros disponíveis");
+            System.out.println("2. Solicitar empréstimo");
+            System.out.println("3. Consultar meus empréstimos");
+            System.out.println("4. Sair");
+            opcao = sc.nextInt();
+
+            switch (opcao){
+                case 1 -> acoesLeitor.vizualizarLivrosDisponiveis();
+                case 2 -> {
+                    sc.nextLine();
+                    System.out.println("Digite o ISBN do livro que você deseja emprestar: ");
+                    String isbn = sc.nextLine();
+
+                    acoesLeitor.solicitarEmprestimo(isbn, leitor);
+                }
+                case 3 -> {
+                    for(Emprestimo e : leitor.getEmprestimos()){
+                        System.out.println(e.getLivro());
+                    }
+                }
+                case 4 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção Inválida.");
+            }
+
+        }while(opcao != 4);
+    }
+
+    public static void menuAdministrador(Administrador administrador){
+        opcao = 0;
+
+        do{
+            System.out.println("1. Cadastrar livro");
+            System.out.println("2. Remover livro");
+            System.out.println("3. Ver relatório de empréstimos");
+            System.out.println("4. Sair");
+            opcao = sc.nextInt();
+
+            switch(opcao){
+                case 1 -> {
+                    sc.nextLine();
+                    System.out.println("Digite o Título: ");
+                    String titulo = sc.nextLine();
+
+                    System.out.println("Digite o autor: ");
+                    String autor = sc.nextLine();
+
+                    System.out.println("Digite o ISBN: ");
+                    String isbn = sc.nextLine();
+
+                    Livro livro = new Livro(titulo, autor, isbn);
+                    acoesAdm.cadastrarLivro(livro);
+
+                    System.out.println("Livro cadastrado com sucesso.");
+                }
+                case 2 -> {
+                    System.out.println("Digite o ISBN do livro que deseja remover: ");
+                    String isbn = sc.next();
+
+                    acoesAdm.excluirLivro(isbn);
+                    System.out.println("Livro removido com sucesso.");
+                }
+                case 3 -> acoesAdm.gerarRelatorioEmprestimos();
+                case 4 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção inválida.");
+            }
+
+        }while(opcao != 4);
+    }
+}

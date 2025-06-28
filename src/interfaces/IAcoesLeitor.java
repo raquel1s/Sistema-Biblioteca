@@ -1,0 +1,9 @@
+package interfaces;
+
+import dominio.Leitor;
+
+public interface IAcoesLeitor {
+
+    void vizualizarLivrosDisponiveis();
+    void solicitarEmprestimo(String isbn, Leitor leitor);
+}
