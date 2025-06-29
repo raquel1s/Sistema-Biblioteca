@@ -6,4 +6,5 @@ public interface IAcoesLeitor {
 
     void vizualizarLivrosDisponiveis();
     void solicitarEmprestimo(String isbn, Leitor leitor);
+    void devolucao(String isbn, Leitor leitor);
 }

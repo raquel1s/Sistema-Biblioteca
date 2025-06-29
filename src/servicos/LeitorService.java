@@ -46,4 +46,15 @@ public class LeitorService implements IAcoesLeitor {
             System.out.println("Nenhum livro encontrado.");
         }
     }
+
+    @Override
+    public void devolucao(String isbn, Leitor leitor) {
+        Livro livro = livroRepo.buscarLivroPorIsbn(isbn);
+
+        if(livro != null){
+            emprestimoService.devolverLivro(leitor, livro);
+        }else{
+            System.out.println("Nenhum livro encontrado. Verifique o ISBN do livro.");
+        }
+    }
 }

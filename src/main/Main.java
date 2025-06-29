@@ -122,6 +122,7 @@ public class Main {
             System.out.println("1. Ver livros disponíveis");
             System.out.println("2. Solicitar empréstimo");
             System.out.println("3. Consultar meus empréstimos");
+            System.out.println("4. Devolver livro");
             System.out.println("4. Sair");
             opcao = sc.nextInt();
 
@@ -137,17 +138,23 @@ public class Main {
                 case 3 -> {
                     if(!leitor.getEmprestimos().isEmpty()){
                         for(Emprestimo e : leitor.getEmprestimos()){
-                            System.out.println(e.getLivro());
+                            System.out.println(e.getLivro() + "\nData de devolução: " + e.getDataDevolucao());
                         }
                     }else{
                         System.out.println("Você não possui nenhum empréstimo.");
                     }
                 }
-                case 4 -> System.out.println("Saindo...");
+                case 4 -> {
+                    System.out.println("Digite o ISBN do livro que você deseja emprestar: ");
+                    String isbn = sc.nextLine();
+
+                    acoesLeitor.devolucao(isbn, leitor);
+                }
+                case 5 -> System.out.println("Saindo...");
                 default -> System.out.println("Opção Inválida.");
             }
 
-        }while(opcao != 4);
+        }while(opcao != 5);
     }
 
     public static void menuAdministrador(Administrador administrador){

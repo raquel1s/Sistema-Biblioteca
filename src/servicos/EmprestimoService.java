@@ -30,12 +30,32 @@ public class EmprestimoService implements IEmprestimoService {
         }
 
         LocalDate dataEmprestimo = LocalDate.now();
-        LocalDate dataPrevista = dataEmprestimo.plusDays(30);
+        LocalDate dataPrevista = dataEmprestimo.plusDays(15);
         Emprestimo emprestimo = new Emprestimo(livro, leitor, dataEmprestimo, dataPrevista);
 
         leitor.getEmprestimos().add(emprestimo);
         livro.setDisponivel(false);
 
         System.out.println("Livro emprestado com sucesso.");
+    }
+
+    @Override
+    public void devolverLivro(Leitor leitor, Livro livro) {
+        Emprestimo emprestimoEncontrado = null;
+
+        for(Emprestimo e : leitor.getEmprestimos()){
+            if(e.getLivro().equals(livro)){
+                emprestimoEncontrado = e;
+                break;
+            }
+        }
+
+        if(emprestimoEncontrado != null){
+            livro.setDisponivel(true);
+            leitor.getEmprestimos().remove(emprestimoEncontrado);
+            System.out.println("Livro devolvido com sucesso.");
+        }else{
+            System.out.println("Este livro não foi emprestado.");
+        }
     }
 }
