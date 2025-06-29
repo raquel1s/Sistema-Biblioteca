@@ -27,7 +27,20 @@ public class CadastroLivroService implements IAcoesAdministrador {
 
     @Override
     public void excluirLivro(String isbn) {
-        livroRepository.remover(isbn);
+        for(Livro l : livroRepository.listarTodosLivros()){
+            if(l.getIsbn().equals(isbn)){
+                if(l.isDisponivel()){
+                    livroRepository.remover(isbn);
+                    System.out.println("Livro removido com sucesso.");
+                    return;
+                }else{
+                    System.out.println("Livro não pode ser removido pois está emprestado.");
+                    return;
+                }
+            }
+        }
+
+        System.out.println("Erro ao excluir livro. Verifique o ISBN do livro.");
     }
 
     @Override

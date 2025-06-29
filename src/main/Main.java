@@ -78,7 +78,6 @@ public class Main {
         String matricula = sc.next();
 
         cadastroUsuario.cadastrarLeitor(nome, email, senha, matricula);
-        System.out.println("Leitor cadastrado com sucesso.");
     }
 
     public static void cadastrar(){
@@ -105,14 +104,12 @@ public class Main {
                 String matricula = sc.next();
 
                 cadastroUsuario.cadastrarLeitor(nome, email, senha, matricula);
-                System.out.println("Leitor cadastrado com sucesso.");
             }
             case 2 -> {
                 System.out.println("Digite o cargo: ");
                 String cargo = sc.next();
 
                 cadastroUsuario.cadastrarAdministrador(nome, email, senha, cargo);
-                System.out.println("Administrador cadastrado com sucesso.");
             }
             default -> System.out.println("Opção Inválida.");
         }
@@ -187,7 +184,6 @@ public class Main {
                     String isbn = sc.next();
 
                     acoesAdm.excluirLivro(isbn);
-                    System.out.println("Livro removido com sucesso.");
                 }
                 case 4 -> acoesAdm.gerarRelatorioEmprestimos();
                 case 5 -> System.out.println("Saindo...");

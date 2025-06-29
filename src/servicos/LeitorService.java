@@ -18,14 +18,21 @@ public class LeitorService implements IAcoesLeitor {
 
     @Override
     public void vizualizarLivrosDisponiveis() {
-        if(!livroRepo.listarTodosLivros().isEmpty()) {
-            for(Livro l : livroRepo.listarTodosLivros()){
-                if(l.isDisponivel()){
-                    System.out.println(l);
-                }
-            }
-        }else{
+        if(livroRepo.listarTodosLivros().isEmpty()) {
             System.out.println("Nenhum livro disponível.");
+            return;
+        }
+
+        boolean livrosEncontrados = false;
+        for(Livro l : livroRepo.listarTodosLivros()){
+            if(l.isDisponivel()){
+                System.out.println(l);
+                livrosEncontrados = true;
+            }
+        }
+
+        if(!livrosEncontrados){
+            System.out.println("Todos os livros estão emprestados no momento.");
         }
     }
 

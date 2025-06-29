@@ -52,4 +52,8 @@ public class Livro {
                 "\nISBN: " + this.isbn +
                 "\nDisponivel: " + (this.disponivel ? "Sim" : "Não");
     }
+
+    public boolean getDisponivel() {
+        return false;
+    }
 }
