@@ -1,5 +1,6 @@
 package repositorio;
 
+import dominio.Administrador;
 import dominio.Usuario;
 import interfaces.IUsuarioRepository;
 
@@ -8,9 +9,11 @@ import java.util.ArrayList;
 public class UsuarioRepositorioEmMemoria implements IUsuarioRepository {
 
     private ArrayList<Usuario> usuarios;
+    private Usuario adm = new Administrador("Raquel da Silva", "adm@gmail.com", "Adm@123", "Bibliotecaria");
 
     public UsuarioRepositorioEmMemoria() {
         this.usuarios = new ArrayList<>();
+        usuarios.add(adm);
     }
 
     @Override

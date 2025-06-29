@@ -18,10 +18,14 @@ public class LeitorService implements IAcoesLeitor {
 
     @Override
     public void vizualizarLivrosDisponiveis() {
-        for(Livro l : livroRepo.listarTodosLivros()){
-            if(l.isDisponivel()){
-                System.out.println(l);
+        if(!livroRepo.listarTodosLivros().isEmpty()) {
+            for(Livro l : livroRepo.listarTodosLivros()){
+                if(l.isDisponivel()){
+                    System.out.println(l);
+                }
             }
+        }else{
+            System.out.println("Nenhum livro disponível.");
         }
     }
 
@@ -29,6 +33,10 @@ public class LeitorService implements IAcoesLeitor {
     public void solicitarEmprestimo(String isbn, Leitor leitor) {
         Livro livro = livroRepo.buscarLivroPorIsbn(isbn);
 
-        emprestimoService.emprestarLivro(leitor, livro);
+        if(livro != null){
+            emprestimoService.emprestarLivro(leitor, livro);
+        }else{
+            System.out.println("Nenhum livro encontrado.");
+        }
     }
 }
