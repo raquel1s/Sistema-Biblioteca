@@ -2,10 +2,19 @@ package org.example.dominio;
 
 public class Livro {
 
+    private int id;
     private String titulo;
     private String autor;
     private String isbn;
     private boolean disponivel;
+
+    public Livro(int id, String titulo, String autor, String isbn, boolean disponivel) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.isbn = isbn;
+        this.disponivel = disponivel;
+    }
 
     public Livro(String titulo, String autor, String isbn) {
         this.titulo = titulo;

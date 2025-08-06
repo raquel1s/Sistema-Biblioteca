@@ -4,6 +4,11 @@ public class Administrador extends Usuario{
 
     private String cargo;
 
+    public Administrador(int id, String nome, String email, String senha, String cargo) {
+        super(id, nome, email, senha);
+        this.cargo = cargo;
+    }
+
     public Administrador(String nome, String email, String senha, String cargo) {
         super(nome, email, senha);
         this.cargo = cargo;

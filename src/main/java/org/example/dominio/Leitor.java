@@ -7,6 +7,12 @@ public class Leitor extends Usuario{
     private String matricula;
     private ArrayList<Emprestimo> emprestimos;
 
+    public Leitor(int id, String nome, String email, String senha, String matricula) {
+        super(id, nome, email, senha);
+        this.matricula = matricula;
+        this.emprestimos = new ArrayList<>();
+    }
+
     public Leitor(String nome, String email, String senha, String matricula) {
         super(nome, email, senha);
         this.matricula = matricula;
